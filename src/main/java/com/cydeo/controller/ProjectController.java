@@ -24,7 +24,7 @@ public class ProjectController {
         return ResponseEntity.ok(new ResponseWrapper("Projects successfully retrieved", projectService.listAllProjects(), HttpStatus.OK));
     }
 
-    @GetMapping("{projectcode")
+    @GetMapping("{projectcode}")
     public ResponseEntity<ResponseWrapper> getProjectByCode(@PathVariable("projectcode") String code){
         return ResponseEntity.ok(new ResponseWrapper("Project successfully retrieved", projectService.getByProjectCode(code), HttpStatus.OK));
     }
