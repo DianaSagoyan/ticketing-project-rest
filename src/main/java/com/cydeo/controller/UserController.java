@@ -1,7 +1,9 @@
 package com.cydeo.controller;
 
+import com.cydeo.annotation.ExecutionTime;
 import com.cydeo.dto.ResponseWrapper;
 import com.cydeo.dto.UserDTO;
+import com.cydeo.exception.TicketingProjectException;
 import com.cydeo.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
-
 @RestController
 @RequestMapping("/api/v1/user")
 @Tag(name = "UserController", description = "User API")
@@ -21,14 +22,14 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
-
+    @ExecutionTime
     @GetMapping
     @RolesAllowed({"Manager", "Admin"})
     @Operation(summary = "Get users")
     public ResponseEntity<ResponseWrapper> getUsers(){
         return ResponseEntity.ok(new ResponseWrapper("Users are successfully retrieved", userService.listAllUsers(), HttpStatus.OK));
     }
-
+    @ExecutionTime
     @GetMapping("/{username}")
     @RolesAllowed("Admin")
     @Operation(summary = "Get user by user name")
@@ -55,9 +56,10 @@ public class UserController {
     @DeleteMapping("/{username}")
     @RolesAllowed("Admin")
     @Operation(summary = "Delete user")
-    public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("username") String userName){
+    public ResponseEntity<ResponseWrapper> deleteUser(@PathVariable("username") String userName) throws TicketingProjectException {
         userService.delete(userName);
-        return ResponseEntity.ok(new ResponseWrapper("User successfully deleted", HttpStatus.OK));
+        return ResponseEntity.ok(new ResponseWrapper("User is successfully deleted",HttpStatus.OK));
+
     }
 
 }
